@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mlt"
+version = "0.1.0"
+description = "Research-first ML trading framework: prove in notebooks, then build module by module with tests."
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.26",
+    "pandas>=2.1",
+    "pyarrow>=14",
+    "requests>=2.31",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-cov", "ruff", "pre-commit", "nbstripout", "jupyter", "matplotlib"]
+torch = ["torch"]          # optional: only when an experiment justifies it (see docs/decisions)
+live = ["coinbase-advanced-py", "python-dotenv"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
