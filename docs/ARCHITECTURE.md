@@ -1,0 +1,37 @@
+# Architecture
+
+_Last reviewed: 2026-10-22. Update this file whenever a module contract or the data flow changes._
+
+## Data flow
+
+```mermaid
+flowchart LR
+    P[Provider<br/>Deribit / Coinbase] --> S[Canonical candle schema]
+    S --> F[Features]
+    F --> M[Model: Forecaster]
+    M --> ST[Strategy]
+    ST --> R[Risk]
+    R --> E[Execution: Broker]
+    S -. same code .-> B[Backtest]
+    B -. parity test .-> E
+```
+
+## Build order and why
+
+`config → data → features → models → strategy → risk → backtest → execution → engine`.
+Each module depends only on the ones before it, so it can be tested in isolation; `engine` is last because it only wires finished parts together.
+
+## Contracts
+
+| Contract | Location | Rule |
+|---|---|---|
+| Candle schema | `mlt/data/schema.py` | UTC close-time index, sorted, unique, finite positive prices; gaps are reported, never filled silently. Venue-specific columns must never be used by a deployed model. |
+| `CandleProvider` | `mlt/data/providers/base.py` | Returns validated candles in the canonical schema. |
+| `Forecaster` | `mlt/models/base.py` | `predict` required; `fit` / `partial_fit` optional; `get_state` / `set_state` so live resumes instead of retraining. Model-agnostic on purpose, so every family competes fairly. |
+| Settings | `mlt/config.py` | Dry-run unless both `DRY_RUN=false` and the confirmation phrase are set. |
+
+## Principles
+
+- **Parity**: one input window gives one prediction in notebook, backtest and live.
+- **Causality**: only closed candles; features at bar *t* never see data after *t*.
+- **Evidence before code**: modules are built only after the research gate (see README §2).

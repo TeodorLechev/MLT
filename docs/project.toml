@@ -1,0 +1,64 @@
+# Source of truth for project metadata used by the docs sync.
+# Edit statuses here (and ONLY here) when a phase starts or finishes; docs are regenerated from it.
+# A phase may be set to "done" only with an `evidence` link (notebook, test, ADR or log entry).
+
+name = "mlt"
+tagline = "research-first ML trading framework for crypto perpetuals"
+
+# Dependency order of the modules (also the build order of Stage 2).
+order = ["config", "data", "features", "models", "strategy", "risk", "backtest", "execution", "engine"]
+
+[modules.config]
+description = "Typed settings from environment; dry-run is the default, live needs an explicit confirmation phrase."
+[modules.data]
+description = "Candle providers (Deribit, Coinbase), one canonical OHLCV schema, validation, parquet cache."
+[modules.features]
+description = "Pure feature functions, identical in research, backtest and live (no look-ahead)."
+[modules.models]
+description = "Model-agnostic Forecaster contract plus the models that won experiments."
+[modules.strategy]
+description = "Turns predictions into target positions (thresholds, cost filter)."
+[modules.risk]
+description = "Position limits, daily loss halt, liquidation distance."
+[modules.backtest]
+description = "Walk-forward simulation with fees, slippage and funding; must reproduce notebook results."
+[modules.execution]
+description = "Broker contract with a paper broker and the venue adapter; dry-run by default."
+[modules.engine]
+description = "Wires data -> features -> model -> strategy -> risk -> execution into one live loop."
+
+[[phases]]
+id = "P0"
+name = "Foundation"
+goal = "Repository skeleton, CI, config, candle schema, model contract."
+gate = "Skeleton installs, lint is clean, unit tests pass in CI."
+status = "done"
+evidence = "tests/test_config.py"
+
+[[phases]]
+id = "P1"
+name = "Research"
+goal = "Show with out-of-sample evidence whether a model has a net-of-cost edge on the traded instrument."
+gate = "G1 beats baselines on a held-out period after costs and funding; G2 stable to parameter changes; G3 uses only features available live; G4 reproducible from cached data and fixed seeds."
+status = "in_progress"
+
+[[phases]]
+id = "P2"
+name = "Build"
+goal = "Implement the validated design module by module, each with unit tests."
+gate = "All modules done; parity test (notebook = backtest = live engine) green; backtest reproduces notebook 04."
+status = "not_started"
+
+[[phases]]
+id = "P3"
+name = "Paper trading"
+goal = "Run the full engine on live data without orders."
+gate = "Signals and PnL match the backtest within a tolerance defined in an ADR before the run starts."
+status = "not_started"
+
+[[phases]]
+id = "P4"
+name = "Live, minimal size"
+goal = "Trade real money with the smallest meaningful size and all risk limits on."
+gate = "Defined in an ADR before go-live; requires written venue eligibility check."
+status = "not_started"
