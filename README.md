@@ -8,10 +8,10 @@
 | | |
 |---|---|
 | **Current phase** | P1 – Research (in progress) |
-| **Last synced** | 2026-10-22 |
+| **Last synced** | 2026-10-23 |
 | **Tests** | 19 passed, 0 failed |
 | **Modules done** | 3 / 9 |
-| **Decisions** | 0 accepted · 2 proposed · 0 rejected |
+| **Decisions** | 0 accepted · 3 proposed · 0 rejected |
 <!-- END:auto:status -->
 
 **Focus now / next step:** see [docs/STATUS.md](docs/STATUS.md#current-focus) (kept in sync with every change).
@@ -30,7 +30,7 @@
 
 | Constraint | Why |
 |---|---|
-| Venue must be legally accessible from the operator's jurisdiction (Bulgaria / EU) | The previous venue (Binance) does not hold a licence for Bulgaria; the move to Coinbase was driven by this. Re-check eligibility before any venue change or go-live. |
+| Venue must be legally accessible from the operator's jurisdiction (Bulgaria / EU) | Binance withdrew its MiCA application and suspended EU derivatives from 2026-07-01 (secondary sources). Coinbase is the chosen venue ([ADR 0002](docs/decisions/0002-execution-venue.md), `proposed` until eligibility for Bulgaria is verified). Evidence: [docs/evidence](docs/evidence/venue-availability-2026-10-23.md). |
 | Research instrument = traded instrument | In the predecessor project research used Binance spot BTCUSDT while the live bot traded a different perpetual; fees, funding and price series differ, so results did not transfer. |
 | Only features that exist live | The predecessor's neural network used Binance-only fields that the live feed does not provide. |
 | `DRY_RUN=true` by default | A mistake in configuration must never be able to place a real order. |
@@ -96,12 +96,19 @@ Experiment results with numbers, data period and costs: [docs/RESEARCH_LOG.md](d
 | ID | Decision | Status | Evidence |
 |---|---|---|---|
 | [0001](docs/decisions/0001-model-stack.md) | Model stack (NumPy core vs PyTorch) | proposed | – |
-| [0002](docs/decisions/0002-venue-and-instrument.md) | Traded instrument and data venue | proposed | – |
+| [0002](docs/decisions/0002-execution-venue.md) | Execution venue | proposed | [docs/evidence/venue-availability-2026-10-23.md](docs/evidence/venue-availability-2026-10-23.md) |
+| [0003](docs/decisions/0003-instrument-and-data-source.md) | Traded instrument and research data source | proposed | [docs/evidence/venue-availability-2026-10-23.md](docs/evidence/venue-availability-2026-10-23.md) |
 <!-- END:auto:decisions -->
 
 ## 7. Recent changes
 
 <!-- BEGIN:auto:changes -->
+**2026-10-23**
+- **Added:** docs/evidence/venue-availability-2026-10-23.md - sourced review of Binance, Coinbase and Deribit availability for a Bulgarian resident, with verification checklist V1-V3
+- **Added:** ADR 0003 (traded instrument and research data source), proposed
+- **Changed:** ADR 0002 renamed to 'Execution venue'; owner chose Coinbase on 2026-10-23, kept proposed until eligibility for Bulgaria is verified
+- **Docs:** STATUS next steps and open questions rewritten around checks V1-V3; README constraints updated
+
 **2026-10-22**
 - **Added:** project skeleton (config, canonical candle schema, Forecaster contract) with 19 unit tests, CI and pre-commit
 - **Added:** research notebooks 00-05 as outlines with explicit status lines
@@ -138,4 +145,5 @@ Heavy experiments (PyTorch/GPU) run in Google Colab via `notebooks/00_colab_boot
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Modules, contracts, data flow, parity principle |
 | [docs/RESEARCH_LOG.md](docs/RESEARCH_LOG.md) | Every experiment: setup, numbers, conclusion, link to notebook |
 | [docs/decisions/README.md](docs/decisions/README.md) | Decision records (ADRs) and their evidence |
+| [docs/evidence/](docs/evidence/venue-availability-2026-10-23.md) | Sources and verification checklist behind the venue decision |
 | [docs/CHANGELOG.md](docs/CHANGELOG.md) | Dated history of changes |

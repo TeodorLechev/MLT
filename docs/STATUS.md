@@ -6,15 +6,15 @@ Single place that answers "where are we, what is next and why". Tables are gener
 | | |
 |---|---|
 | **Current phase** | P1 – Research (in progress) |
-| **Last synced** | 2026-10-22 |
+| **Last synced** | 2026-10-23 |
 | **Tests** | 19 passed, 0 failed |
 | **Modules done** | 3 / 9 |
-| **Decisions** | 0 accepted · 2 proposed · 0 rejected |
+| **Decisions** | 0 accepted · 3 proposed · 0 rejected |
 <!-- END:auto:status -->
 
 ## Current focus
 
-Phase **P1 – Research** has just started. The foundation (P0) is done: config, canonical candle schema and the model contract are implemented and tested. No experiment has been run yet, so **no performance claim is made anywhere in this repository**. The immediate goal is to fix the traded instrument and build the data foundation (`01_data`) that every later experiment depends on.
+Phase **P1 – Research** has just started; the foundation (P0) is done. No experiment has been run yet, so **no performance claim is made anywhere in this repository**. The owner decided on 2026-10-23 to use **Coinbase** as the execution venue ([ADR 0002](decisions/0002-execution-venue.md)). That decision stays `proposed` until the eligibility checks V1–V3 in the [evidence file](evidence/venue-availability-2026-10-23.md) are done, because Bulgaria is not confirmed in any public source. Which instrument is traded, and therefore which series the research uses, follows from those checks ([ADR 0003](decisions/0003-instrument-and-data-source.md)).
 
 ## Next steps
 
@@ -22,17 +22,20 @@ Each step states **why** it is needed and its **exit criterion**, so progress is
 
 | # | Step | Why it is needed | Done when |
 |---|---|---|---|
-| 1 | Choose the traded instrument and data venue ([ADR 0002](decisions/0002-venue-and-instrument.md)) | Research must use the instrument that will be traded; costs and funding differ per venue | ADR 0002 `accepted` with evidence, venue eligibility confirmed |
-| 2 | Candle provider + funding history in `01_data` | Every later result depends on clean, reproducible data | Notebook 01 `done`; cache reproducible; schema tests green |
-| 3 | Baselines in `02_baselines` (buy-and-hold, flat, linear model) with costs | These are the bars any candidate must beat (gate G1) | Notebook 02 `done`; numbers in the research log (R-001) |
+| 1 | Run checks V1–V3 with Coinbase (derivatives available for the account, serving entity and product, API access) | Coinbase is chosen, but eligibility for a Bulgarian resident and API access are unverified; trading where it is not allowed is not an option | V1–V3 results recorded in the evidence file; ADR 0002 `accepted` (or option 4 evaluated if checks fail) |
+| 2 | Choose the traded instrument and research data source ([ADR 0003](decisions/0003-instrument-and-data-source.md)) | Research must use the instrument that will be traded; funding, settlement and leverage differ between the candidate products | ADR 0003 `accepted` with the measured proxy difference, if a proxy is used |
+| 3 | Candle provider + funding history in `01_data` | Every later result depends on clean, reproducible data | Notebook 01 `done`; cache reproducible; schema tests green |
+| 4 | Baselines in `02_baselines` (buy-and-hold, flat, linear model) with costs | These are the bars any candidate must beat (gate G1) | Notebook 02 `done`; numbers in the research log (R-001) |
 
 ## Open questions and risks
 
 | Question / risk | Impact | Owner / how we resolve it |
 |---|---|---|
-| Which instrument is executed on the venue (Deribit `BTC-PERPETUAL` data vs the Coinbase Global Derivatives perpetual)? | Costs, funding and symbol mapping differ, so results may not transfer | Owner decides; tracked in [ADR 0002](decisions/0002-venue-and-instrument.md), must be settled before notebook 02 |
-| Is the chosen venue legally open to a Bulgarian / EU resident? | Hard blocker for P3/P4 (paper and live) | Owner confirms in writing with the venue before go-live; not verified by this project |
-| Model family is open (linear, NN, boosting, sequence) | Avoid anchoring on the predecessor's linear/NN setup | Compared fairly in `03_features_model`; tracked in [ADR 0001](decisions/0001-model-stack.md) |
+| Is Bulgaria among the 26 countries where Coinbase offers EEA derivatives, and is the owner's account eligible? | Hard blocker for paper/live (P3/P4) and for choosing the research instrument | Owner runs V1–V2; result in the [evidence file](evidence/venue-availability-2026-10-23.md) |
+| Can the EEA "perpetual-style" future be traded through the API, or only the Global Derivatives gateway? | Decides the broker adapter and what data can be cached | V3; Coinbase docs or support |
+| Binance status rests on secondary sources only | Low; Binance is excluded either way | Optionally confirm against Binance's own notice |
+| Coinbase API for derivatives changed on 2026-10-01 (JSON-RPC 2.0 gateway, no parallel run) | Any code written against the old INTX REST endpoints must be rewritten | Execution adapter is built only after ADR 0002 is accepted |
+| Model family is open (linear, NN, boosting, sequence) | Avoid anchoring on the predecessor's setup | Compared fairly in `03_features_model`; tracked in [ADR 0001](decisions/0001-model-stack.md) |
 
 ## Modules
 
@@ -69,5 +72,6 @@ Each step states **why** it is needed and its **exit criterion**, so progress is
 | ID | Decision | Status | Evidence |
 |---|---|---|---|
 | [0001](decisions/0001-model-stack.md) | Model stack (NumPy core vs PyTorch) | proposed | – |
-| [0002](decisions/0002-venue-and-instrument.md) | Traded instrument and data venue | proposed | – |
+| [0002](decisions/0002-execution-venue.md) | Execution venue | proposed | [docs/evidence/venue-availability-2026-10-23.md](../docs/evidence/venue-availability-2026-10-23.md) |
+| [0003](decisions/0003-instrument-and-data-source.md) | Traded instrument and research data source | proposed | [docs/evidence/venue-availability-2026-10-23.md](../docs/evidence/venue-availability-2026-10-23.md) |
 <!-- END:auto:decisions -->
