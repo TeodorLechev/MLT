@@ -6,7 +6,7 @@ Single place that answers "where are we, what is next and why". Tables are gener
 | | |
 |---|---|
 | **Current phase** | P1 – Research (in progress) |
-| **Last synced** | 2026-10-23 |
+| **Last synced** | 2026-10-24 |
 | **Tests** | 19 passed, 0 failed |
 | **Modules done** | 3 / 9 |
 | **Decisions** | 0 accepted · 3 proposed · 0 rejected |
@@ -22,7 +22,7 @@ Each step states **why** it is needed and its **exit criterion**, so progress is
 
 | # | Step | Why it is needed | Done when |
 |---|---|---|---|
-| 1 | Run checks V1–V3 with Coinbase (derivatives available for the account, serving entity and product, API access) | Coinbase is chosen, but eligibility for a Bulgarian resident and API access are unverified; trading where it is not allowed is not an option | V1–V3 results recorded in the evidence file; ADR 0002 `accepted`; if the checks fail, V4 (Kraken, then OKX) is run before any research is finalised |
+| 1 | Run checks V1–V3 with Coinbase retail support at help.coinbase.com (not the Derivatives Exchange desk, E28): derivatives available for the account, serving entity and product, API access | Coinbase is chosen, but eligibility for a Bulgarian resident and API access are unverified; trading where it is not allowed is not an option | V1–V3 results recorded in the evidence file; ADR 0002 `accepted`; if the checks fail, V4 (Kraken, then OKX) is run before any research is finalised |
 | 2 | Choose the traded instrument and research data source ([ADR 0003](decisions/0003-instrument-and-data-source.md)) | Research must use the instrument that will be traded; funding, settlement and leverage differ between the candidate products | ADR 0003 `accepted` with the measured proxy difference, if a proxy is used |
 | 3 | Candle provider + funding history in `01_data` | Every later result depends on clean, reproducible data | Notebook 01 `done`; cache reproducible; schema tests green |
 | 4 | Baselines in `02_baselines` (buy-and-hold, flat, linear model) with costs | These are the bars any candidate must beat (gate G1) | Notebook 02 `done`; numbers in the research log (R-001) |
@@ -33,8 +33,11 @@ Each step states **why** it is needed and its **exit criterion**, so progress is
 |---|---|---|
 | Is Bulgaria among the 26 countries where Coinbase offers EEA derivatives, and is the owner's account eligible? | Hard blocker for paper/live (P3/P4) and for choosing the research instrument | Owner runs V1–V2; result in the [evidence file](evidence/venue-availability-2026-10-23.md) |
 | Can the EEA "perpetual-style" future be traded through the API, or only the Global Derivatives gateway? | Decides the broker adapter and what data can be cached. If the EU-licensed product has no API, an automated strategy cannot run legally at Coinbase and Kraken/OKX become the plan | V3; Coinbase docs or support |
-| Coinbase states that true perpetual futures for EEA users come from non-EEA affiliates, not under an EU licence (E15); only the CySEC futures product is EU-licensed (E4). The owner's current derivatives may be served by the non-EU route | Legal basis and traded product may differ from what the research assumes | V1 names the entity; use the EU-licensed product or a fallback venue |
+| Coinbase states that true perpetual futures for EEA users come from non-EEA affiliates, not under an EU licence (E15); the owner's current product is most likely served by Coinbase Bermuda Ltd (E21, E29), whose agreement caps liability, uses Bermuda arbitration and allows liquidation and auto-deleveraging; only the CySEC futures product is EU-licensed (E4). The owner's current derivatives may be served by the non-EU route | Legal basis and traded product may differ from what the research assumes | V1 names the entity; use the EU-licensed product or a fallback venue |
 | The owner's Coinbase API key carries `transfer` and `export` permissions in addition to `trade` and `view` | A leaked key could move funds; a trading bot needs only `view` and `trade` | Create a separate key with `view` + `trade` for the bot before any automated run; keep it outside the repository |
+| The EU-licensed Coinbase contract (index-based, daily settlement, price limits) may have a short price history and different mechanics from the Deribit-based perpetual | Research on the wrong or too short a series would not transfer to the traded product | Compare in `01_data`; if only a proxy is usable, measure its difference first (ADR 0003) |
+| The contract terms for the owner's current account are one-sided: liability capped at 12 months of fees (E33), Bermuda arbitration, a pledge over the assets in the derivatives account, liquidation and auto-deleveraging at the exchange's discretion (E29, E30) | Real losses beyond the owner's control; recourse is limited | Owner decides with these terms in view; independent legal advice recommended before real money |
+| Market data obtained through Coinbase Bermuda may not be stored in a standalone database (E32) | A research cache built from it could breach the terms | Read Deribit's public API terms before step 3; keep the cache private and unshared |
 | Binance status rests on secondary sources only | Low; Binance is excluded either way | Optionally confirm against Binance's own notice |
 | Coinbase API for derivatives changed on 2026-10-01 (JSON-RPC 2.0 gateway, no parallel run) | Any code written against the old INTX REST endpoints must be rewritten | Execution adapter is built only after ADR 0002 is accepted |
 | Model family is open (linear, NN, boosting, sequence) | Avoid anchoring on the predecessor's setup | Compared fairly in `03_features_model`; tracked in [ADR 0001](decisions/0001-model-stack.md) |
