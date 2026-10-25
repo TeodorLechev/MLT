@@ -10,10 +10,15 @@ Dated history of what changed and why. Groups: Added, Changed, Fixed, Removed, D
 - evidence E28 - the Derivatives Exchange desk does not handle retail questions; V2 to be retried through retail support
 - evidence E29 - key terms of the Coinbase Bermuda User Agreement (Part A) that apply to the owner's Global Derivatives account
 - evidence E30-E33 (Coinbase Bermuda agreement Parts B, D and Appendix 4: EEA clients are CBBM clients with a Luxembourg pledge, orders execute only on Deribit, market-data storage restriction, version differences)
+- Deribit public provider (candles, funding, instrument spec) with retries, pagination and canonical close-time index; parquet cache with incremental download and atomic writes; find_gaps in the schema module
+- 18 unit tests for the provider, the cache and gap detection (fake HTTP session, no network)
+- notebooks/01_data with working cells for spec check, candles, quality checks and funding (status in progress; to be run by the owner)
+- evidence E34 (Deribit Terms of Service: personal use only)
 
 ### Docs
 - STATUS next step 1 names the correct channel
 - STATUS risks on contract terms and on market-data licensing
+- STATUS next step 3 and data-licensing risk updated
 
 ### Changed
 - V1 now asks the owner to confirm the entity from the onboarding screen or e-mail and to read Part D (country-specific terms)

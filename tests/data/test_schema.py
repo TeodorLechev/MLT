@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-from mlt.data.schema import drop_unclosed, interval_to_ms, validate_candles
+from mlt.data.schema import drop_unclosed, find_gaps, interval_to_ms, validate_candles
 
 
 def make(n=5, freq="1h"):
@@ -62,3 +62,16 @@ def test_drop_unclosed_is_causal():
     out = drop_unclosed(df, now)
     assert out.index.max() < now
     assert len(out) == 3
+
+
+def test_find_gaps_reports_missing_stretches():
+    full = make(8)
+    df = full.drop(full.index[[2, 3, 6]])
+    gaps = find_gaps(df, "1h")
+    assert list(gaps["n_missing"]) == [2, 1]
+    assert gaps.loc[0, "start"] == full.index[2]
+    assert gaps.loc[0, "end"] == full.index[3]
+
+
+def test_find_gaps_empty_when_regular():
+    assert find_gaps(make(5), "1h").empty

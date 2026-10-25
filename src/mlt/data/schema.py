@@ -56,3 +56,29 @@ def validate_candles(df: pd.DataFrame, interval: str | None = None) -> pd.DataFr
 def drop_unclosed(df: pd.DataFrame, now: pd.Timestamp) -> pd.DataFrame:
     """Keep only candles whose close time is strictly before `now` (causality guard)."""
     return df[df.index < now]
+
+
+def find_gaps(df: pd.DataFrame, interval: str) -> pd.DataFrame:
+    """Report missing stretches in a candle frame (never fills them).
+
+    Returns one row per gap with the first and last missing close time and the number of
+    missing candles. An empty frame means the series is regular.
+    """
+    step = pd.Timedelta(milliseconds=interval_to_ms(interval))
+    cols = ["start", "end", "n_missing"]
+    if len(df) < 2:
+        return pd.DataFrame(columns=cols)
+    prev = df.index[:-1]
+    cur = df.index[1:]
+    diff = cur - prev
+    mask = diff > step
+    if not mask.any():
+        return pd.DataFrame(columns=cols)
+    prev_g, cur_g, diff_g = prev[mask], cur[mask], diff[mask]
+    return pd.DataFrame(
+        {
+            "start": prev_g + step,
+            "end": cur_g - step,
+            "n_missing": (diff_g // step).astype(int) - 1,
+        }
+    ).reset_index(drop=True)
