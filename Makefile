@@ -4,6 +4,6 @@ install:
 test:
 	pytest
 lint:
-	ruff check src tests
+	ruff check src tests tools
 notebook:
 	jupyter lab

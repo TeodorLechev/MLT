@@ -4,6 +4,29 @@ Dated history of what changed and why. Groups: Added, Changed, Fixed, Removed, D
 
 <!-- changelog:start -->
 
+## 2026-10-26
+
+### Added
+- evidence E37 (smoke test stage 0: public gateway reachable from the owner's location; contract specification and fee fields read)
+
+### Changed
+- ADR 0003 records the gateway's contract specification; STATUS step 1a narrowed to stages 1-2
+- smoke test validates the key file (clear errors for a wrong format or an Ed25519 key, never echoing secrets); runbook gets a Windows example
+
+
+## 2026-10-25
+
+### Added
+- tools/coinbase_smoke_test.py (read-only stages plus one post-only order that is cancelled; refuses to place orders without a confirmation phrase) with 10 unit tests against a fake gateway, and docs/RUNBOOK_API_SMOKE_TEST.md
+- evidence E35 (help-center chat) and E36 (gateway technical guide); V2 and V3 results updated
+
+### Changed
+- lint and CI now cover tools/; live/dev extras include PyJWT and cryptography
+
+### Docs
+- STATUS next step 1a (smoke test) and README documentation map
+
+
 ## 2026-10-24
 
 ### Added

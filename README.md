@@ -8,8 +8,8 @@
 | | |
 |---|---|
 | **Current phase** | P1 – Research (in progress) |
-| **Last synced** | 2026-10-24 |
-| **Tests** | 37 passed, 0 failed |
+| **Last synced** | 2026-10-26 |
+| **Tests** | 49 passed, 0 failed |
 | **Modules done** | 3 / 9 |
 | **Decisions** | 0 accepted · 3 proposed · 0 rejected |
 <!-- END:auto:status -->
@@ -103,6 +103,17 @@ Experiment results with numbers, data period and costs: [docs/RESEARCH_LOG.md](d
 ## 7. Recent changes
 
 <!-- BEGIN:auto:changes -->
+**2026-10-26**
+- **Added:** evidence E37 (smoke test stage 0: public gateway reachable from the owner's location; contract specification and fee fields read)
+- **Changed:** ADR 0003 records the gateway's contract specification; STATUS step 1a narrowed to stages 1-2
+- **Changed:** smoke test validates the key file (clear errors for a wrong format or an Ed25519 key, never echoing secrets); runbook gets a Windows example
+
+**2026-10-25**
+- **Added:** tools/coinbase_smoke_test.py (read-only stages plus one post-only order that is cancelled; refuses to place orders without a confirmation phrase) with 10 unit tests against a fake gateway, and docs/RUNBOOK_API_SMOKE_TEST.md
+- **Added:** evidence E35 (help-center chat) and E36 (gateway technical guide); V2 and V3 results updated
+- **Changed:** lint and CI now cover tools/; live/dev extras include PyJWT and cryptography
+- **Docs:** STATUS next step 1a (smoke test) and README documentation map
+
 **2026-10-24**
 - **Added:** evidence E28 - the Derivatives Exchange desk does not handle retail questions; V2 to be retried through retail support
 - **Added:** evidence E29 - key terms of the Coinbase Bermuda User Agreement (Part A) that apply to the owner's Global Derivatives account
@@ -116,34 +127,6 @@ Experiment results with numbers, data period and costs: [docs/RESEARCH_LOG.md](d
 - **Docs:** STATUS next step 3 and data-licensing risk updated
 - **Changed:** V1 now asks the owner to confirm the entity from the onboarding screen or e-mail and to read Part D (country-specific terms)
 - **Changed:** V1 now names Coinbase Bermuda Ltd with Luxembourg custody as the serving entity, pending the owner's confirmation; ADR 0002 and 0003 updated
-
-**2026-10-23**
-- **Added:** docs/evidence/venue-availability-2026-10-23.md - sourced review of Binance, Coinbase and Deribit availability for a Bulgarian resident, with verification checklist V1-V3
-- **Added:** ADR 0003 (traded instrument and research data source), proposed
-- **Added:** evidence E14-E19 and a comparison of EU-authorised derivatives routes (Coinbase, Kraken, OKX) in docs/evidence
-- **Added:** evidence E20 (owner's Coinbase account shows BTC_USDC-PERPETUAL on the Global Derivatives portfolio); V1 partly done
-- **Added:** evidence E21-E24 (Coinbase help: Global Derivatives served by Coinbase Bermuda Ltd for unlisted jurisdictions; EU-licensed product is the US derivatives offering via CBFSE; developer-docs answers)
-- **Added:** evidence E25-E27 (Coinbase Derivatives rulebook: BIP contract specification; EEA user agreement scope)
-- **Changed:** ADR 0002 renamed to 'Execution venue'; owner chose Coinbase on 2026-10-23, kept proposed until eligibility for Bulgaria is verified
-- **Changed:** ADR 0002 now has an explicit decision rule and Kraken/OKX as ranked fallbacks; verification checklist gets V4
-- **Changed:** evidence E15 verified from Coinbase's own page - true perpetuals for EEA users are served by non-EEA affiliates, not under an EU licence
-- **Changed:** ADR 0002/0003 now require the EU-licensed Coinbase product to pass V1-V3 (incl. API); Global Derivatives perpetual demoted to an option needing the owner's own legal check
-- **Changed:** ADR 0003 notes the hypothesis that Deribit public candles of the same contract are the traded series, to be verified in 01_data
-- **Changed:** V1 narrowed to confirming the entity in the owner's agreement; V2 not answered by the docs assistant; V3 partly answered
-- **Changed:** ADR 0003 option 1 records the contract mechanics; V1 points to the derivatives agreement, not the EEA user agreement
-- **Docs:** STATUS next steps and open questions rewritten around checks V1-V3; README constraints updated
-- **Docs:** STATUS open questions note that the current Coinbase derivatives may be served by a non-EU entity
-- **Docs:** STATUS risks updated (legal path and API path at Coinbase may not coincide)
-- **Docs:** STATUS risk about over-broad API key permissions
-- **Docs:** ADR 0002 and 0003 describe the two Coinbase routes by entity
-- **Docs:** STATUS risk about the history and mechanics of the EU-licensed contract
-
-**2026-10-22**
-- **Added:** project skeleton (config, canonical candle schema, Forecaster contract) with 19 unit tests, CI and pre-commit
-- **Added:** research notebooks 00-05 as outlines with explicit status lines
-- **Added:** decision records 0001 (model stack, proposed) and 0002 (traded instrument and venue, proposed)
-- **Docs:** documentation system - README, STATUS, ARCHITECTURE, RESEARCH_LOG, CHANGELOG, decisions with an evidence rule
-- **Fixed:** removed two stray empty directories from the first skeleton archive
 
 Full history: [docs/CHANGELOG.md](docs/CHANGELOG.md).
 <!-- END:auto:changes -->
@@ -175,4 +158,5 @@ Heavy experiments (PyTorch/GPU) run in Google Colab via `notebooks/00_colab_boot
 | [docs/RESEARCH_LOG.md](docs/RESEARCH_LOG.md) | Every experiment: setup, numbers, conclusion, link to notebook |
 | [docs/decisions/README.md](docs/decisions/README.md) | Decision records (ADRs) and their evidence |
 | [docs/evidence/](docs/evidence/venue-availability-2026-10-23.md) | Sources and verification checklist behind the venue decision |
+| [docs/RUNBOOK_API_SMOKE_TEST.md](docs/RUNBOOK_API_SMOKE_TEST.md) | How to verify API trading safely (stages, safeguards, what to record) |
 | [docs/CHANGELOG.md](docs/CHANGELOG.md) | Dated history of changes |
