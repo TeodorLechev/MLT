@@ -13,6 +13,8 @@ Dated history of what changed and why. Groups: Added, Changed, Fixed, Removed, D
 - ADR 0003 records the gateway's contract specification; STATUS step 1a narrowed to stages 1-2
 - smoke test validates the key file (clear errors for a wrong format or an Ed25519 key, never echoing secrets); runbook gets a Windows example
 
+### Fixed
+- removed the shebang from tools/coinbase_smoke_test.py (ruff EXE001 failed CI because git stores the file as non-executable); the script is run with python tools/coinbase_smoke_test.py
 
 ## 2026-10-25
 

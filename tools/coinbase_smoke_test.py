@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Coinbase Global Derivatives gateway smoke test (ADR 0002, check V3).
 
 Answers ONE technical question: can this API key authenticate to the Deribit-powered

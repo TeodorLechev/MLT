@@ -107,6 +107,7 @@ Experiment results with numbers, data period and costs: [docs/RESEARCH_LOG.md](d
 - **Added:** evidence E37 (smoke test stage 0: public gateway reachable from the owner's location; contract specification and fee fields read)
 - **Changed:** ADR 0003 records the gateway's contract specification; STATUS step 1a narrowed to stages 1-2
 - **Changed:** smoke test validates the key file (clear errors for a wrong format or an Ed25519 key, never echoing secrets); runbook gets a Windows example
+- **Fixed:** removed the shebang from tools/coinbase_smoke_test.py (ruff EXE001 failed CI because git stores the file as non-executable); the script is run with python tools/coinbase_smoke_test.py
 
 **2026-10-25**
 - **Added:** tools/coinbase_smoke_test.py (read-only stages plus one post-only order that is cancelled; refuses to place orders without a confirmation phrase) with 10 unit tests against a fake gateway, and docs/RUNBOOK_API_SMOKE_TEST.md
