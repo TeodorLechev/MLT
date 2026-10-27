@@ -6,7 +6,7 @@ Single place that answers "where are we, what is next and why". Tables are gener
 | | |
 |---|---|
 | **Current phase** | P1 – Research (in progress) |
-| **Last synced** | 2026-10-26 |
+| **Last synced** | 2026-10-27 |
 | **Tests** | 49 passed, 0 failed |
 | **Modules done** | 3 / 9 |
 | **Decisions** | 0 accepted · 3 proposed · 0 rejected |
@@ -23,7 +23,7 @@ Each step states **why** it is needed and its **exit criterion**, so progress is
 | # | Step | Why it is needed | Done when |
 |---|---|---|---|
 | 1 | Run checks V1–V3 with Coinbase retail support at help.coinbase.com (not the Derivatives Exchange desk, E28): derivatives available for the account, serving entity and product, API access | Coinbase is chosen, but eligibility for a Bulgarian resident and API access are unverified; trading where it is not allowed is not an option | V1–V3 results recorded in the evidence file; ADR 0002 `accepted`; if the checks fail, V4 (Kraken, then OKX) is run before any research is finalised |
-| 1a | Run the API smoke test, stages 1–2 (stage 0 done on 2026-10-26, E37; [runbook](RUNBOOK_API_SMOKE_TEST.md)) | Shows whether a view+trade key can authenticate and run an order lifecycle on the gateway; it does not settle legality (V1–V2) | V3 row in the evidence file updated with the outcome; no open order left |
+| 1a | Run the API smoke test, stage 2 (stages 0–1 done on 2026-10-26/27, E37–E38; [runbook](RUNBOOK_API_SMOKE_TEST.md)) | Shows whether the key can run an order lifecycle on the gateway (authentication already works); it does not settle legality (V1–V2) | V3 row in the evidence file updated with the outcome; no open order left |
 | 2 | Choose the traded instrument and research data source ([ADR 0003](decisions/0003-instrument-and-data-source.md)) | Research must use the instrument that will be traded; funding, settlement and leverage differ between the candidate products | ADR 0003 `accepted` with the measured proxy difference, if a proxy is used |
 | 3 | Run `01_data` (Deribit provider, cache and funding are implemented and unit-tested; the owner runs the notebook with network access) | Every later result depends on clean, reproducible data | Notebook 01 `done`; cache reproducible; schema tests green |
 | 4 | Baselines in `02_baselines` (buy-and-hold, flat, linear model) with costs | These are the bars any candidate must beat (gate G1) | Notebook 02 `done`; numbers in the research log (R-001) |

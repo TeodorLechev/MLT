@@ -4,6 +4,15 @@ Dated history of what changed and why. Groups: Added, Changed, Fixed, Removed, D
 
 <!-- changelog:start -->
 
+## 2026-10-27
+
+### Added
+- evidence E38 (smoke test stage 1: authentication with the uri-claim JWT and read-only private calls succeed for the owner's key)
+
+### Changed
+- V3 now shows stages 0-1 done, stage 2 (order lifecycle) pending; STATUS step 1a narrowed to stage 2
+
+
 ## 2026-10-26
 
 ### Added

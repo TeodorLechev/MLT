@@ -8,7 +8,7 @@
 | | |
 |---|---|
 | **Current phase** | P1 – Research (in progress) |
-| **Last synced** | 2026-10-26 |
+| **Last synced** | 2026-10-27 |
 | **Tests** | 49 passed, 0 failed |
 | **Modules done** | 3 / 9 |
 | **Decisions** | 0 accepted · 3 proposed · 0 rejected |
@@ -103,6 +103,10 @@ Experiment results with numbers, data period and costs: [docs/RESEARCH_LOG.md](d
 ## 7. Recent changes
 
 <!-- BEGIN:auto:changes -->
+**2026-10-27**
+- **Added:** evidence E38 (smoke test stage 1: authentication with the uri-claim JWT and read-only private calls succeed for the owner's key)
+- **Changed:** V3 now shows stages 0-1 done, stage 2 (order lifecycle) pending; STATUS step 1a narrowed to stage 2
+
 **2026-10-26**
 - **Added:** evidence E37 (smoke test stage 0: public gateway reachable from the owner's location; contract specification and fee fields read)
 - **Changed:** ADR 0003 records the gateway's contract specification; STATUS step 1a narrowed to stages 1-2
@@ -114,20 +118,6 @@ Experiment results with numbers, data period and costs: [docs/RESEARCH_LOG.md](d
 - **Added:** evidence E35 (help-center chat) and E36 (gateway technical guide); V2 and V3 results updated
 - **Changed:** lint and CI now cover tools/; live/dev extras include PyJWT and cryptography
 - **Docs:** STATUS next step 1a (smoke test) and README documentation map
-
-**2026-10-24**
-- **Added:** evidence E28 - the Derivatives Exchange desk does not handle retail questions; V2 to be retried through retail support
-- **Added:** evidence E29 - key terms of the Coinbase Bermuda User Agreement (Part A) that apply to the owner's Global Derivatives account
-- **Added:** evidence E30-E33 (Coinbase Bermuda agreement Parts B, D and Appendix 4: EEA clients are CBBM clients with a Luxembourg pledge, orders execute only on Deribit, market-data storage restriction, version differences)
-- **Added:** Deribit public provider (candles, funding, instrument spec) with retries, pagination and canonical close-time index; parquet cache with incremental download and atomic writes; find_gaps in the schema module
-- **Added:** 18 unit tests for the provider, the cache and gap detection (fake HTTP session, no network)
-- **Added:** notebooks/01_data with working cells for spec check, candles, quality checks and funding (status in progress; to be run by the owner)
-- **Added:** evidence E34 (Deribit Terms of Service: personal use only)
-- **Docs:** STATUS next step 1 names the correct channel
-- **Docs:** STATUS risks on contract terms and on market-data licensing
-- **Docs:** STATUS next step 3 and data-licensing risk updated
-- **Changed:** V1 now asks the owner to confirm the entity from the onboarding screen or e-mail and to read Part D (country-specific terms)
-- **Changed:** V1 now names Coinbase Bermuda Ltd with Luxembourg custody as the serving entity, pending the owner's confirmation; ADR 0002 and 0003 updated
 
 Full history: [docs/CHANGELOG.md](docs/CHANGELOG.md).
 <!-- END:auto:changes -->
