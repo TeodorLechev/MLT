@@ -8,9 +8,13 @@ Dated history of what changed and why. Groups: Added, Changed, Fixed, Removed, D
 
 ### Added
 - evidence E38 (smoke test stage 1: authentication with the uri-claim JWT and read-only private calls succeed for the owner's key)
+- evidence E39 (smoke test stage 2: a minimum-size post-only order was accepted, queried and cancelled on the Global Derivatives gateway)
+- R-001 in the research log (01_data run by the owner: 26,280 clean hourly candles, 26,244 funding observations, specification identical to the Coinbase gateway); evidence E40
 
 ### Changed
 - V3 now shows stages 0-1 done, stage 2 (order lifecycle) pending; STATUS step 1a narrowed to stage 2
+- V3 closed technically for Global Derivatives, still open for the EU-licensed product; ADR 0002 stays proposed; STATUS step 1a removed and the route decision added to open questions
+- notebook 01_data is done (comparison table and findings filled with the printed numbers); ADR 0003 result recorded; V2 recorded as not obtainable in writing through chat support; STATUS steps updated
 
 
 ## 2026-10-26

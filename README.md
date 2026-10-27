@@ -81,7 +81,7 @@ Module contracts and data flow: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 | Notebook | Purpose | Status |
 |---|---|---|
 | [00_colab_bootstrap.ipynb](notebooks/00_colab_bootstrap.ipynb) | 00 – Colab bootstrap: Run this first in Google Colab (needed only for experiments that require PyTorch/GPU). | not started |
-| [01_data.ipynb](notebooks/01_data.ipynb) | 01 – Data: Goal: load the perpetual we will actually trade, validate it, cache it. Checks: gaps, duplicates, closed candles only, UTC. Add funding rates. | in progress |
+| [01_data.ipynb](notebooks/01_data.ipynb) | 01 – Data: Goal: load the perpetual we will actually trade, validate it, cache it. Checks: gaps, duplicates, closed candles only, UTC. Add funding rates. | done |
 | [02_baselines.ipynb](notebooks/02_baselines.ipynb) | 02 – Baselines: Buy-and-hold, flat, and the previous linear model on the NEW data, with costs. | not started |
 | [03_features_model.ipynb](notebooks/03_features_model.ipynb) | 03 – Features and models: Only features that exist live. Compare model families fairly (same data, costs, splits). | not started |
 | [04_validation.ipynb](notebooks/04_validation.ipynb) | 04 – Validation: Tune on an early window; test ONCE on a held-out later window. Costs and funding included. | not started |
@@ -105,7 +105,11 @@ Experiment results with numbers, data period and costs: [docs/RESEARCH_LOG.md](d
 <!-- BEGIN:auto:changes -->
 **2026-10-27**
 - **Added:** evidence E38 (smoke test stage 1: authentication with the uri-claim JWT and read-only private calls succeed for the owner's key)
+- **Added:** evidence E39 (smoke test stage 2: a minimum-size post-only order was accepted, queried and cancelled on the Global Derivatives gateway)
+- **Added:** R-001 in the research log (01_data run by the owner: 26,280 clean hourly candles, 26,244 funding observations, specification identical to the Coinbase gateway); evidence E40
 - **Changed:** V3 now shows stages 0-1 done, stage 2 (order lifecycle) pending; STATUS step 1a narrowed to stage 2
+- **Changed:** V3 closed technically for Global Derivatives, still open for the EU-licensed product; ADR 0002 stays proposed; STATUS step 1a removed and the route decision added to open questions
+- **Changed:** notebook 01_data is done (comparison table and findings filled with the printed numbers); ADR 0003 result recorded; V2 recorded as not obtainable in writing through chat support; STATUS steps updated
 
 **2026-10-26**
 - **Added:** evidence E37 (smoke test stage 0: public gateway reachable from the owner's location; contract specification and fee fields read)

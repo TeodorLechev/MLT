@@ -20,7 +20,7 @@ The owner has no preference between Binance, Coinbase and Deribit as long as tra
 Not a modelling experiment. Verification checks V1–V3 in the evidence file must pass: derivatives are available to the owner's account, the serving entity and product are known, and the product is tradable through the API.
 
 ## Result
-Not yet measured. V1–V3 are open.
+V3 (technical) passed for the Global Derivatives product on 2026-10-27: authentication, order placement, state query and cancellation (E37–E39). V1 (entity confirmation), V2 (written answer) and V3 for the EU-licensed product remain open.
 
 ## Decision and consequences
 **Owner decision (2026-10-23): use Coinbase.** The record stays `proposed` until V1–V3 are done; it becomes `accepted` only with their results in the evidence file. Acceptance requires the **EU-licensed product (a)** to pass V1–V3, in particular V3 (API trading); passing them only for the non-EU product (b) is not enough, see E15. Decision rule: the first venue that passes V1–V3 (derivatives eligible for the owner's account, serving entity is EU/MiFID-authorised, API trading works) is accepted; order of evaluation: Coinbase, Kraken, OKX (V4 in the evidence file). A non-EU entity (Bermuda, Dubai) serving the account is not enough, see E14.

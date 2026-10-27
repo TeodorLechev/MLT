@@ -14,7 +14,7 @@ Single place that answers "where are we, what is next and why". Tables are gener
 
 ## Current focus
 
-Phase **P1 – Research** has just started; the foundation (P0) is done. No experiment has been run yet, so **no performance claim is made anywhere in this repository**. The owner decided on 2026-10-23 to use **Coinbase** as the execution venue ([ADR 0002](decisions/0002-execution-venue.md)). That decision stays `proposed` until the eligibility checks V1–V3 in the [evidence file](evidence/venue-availability-2026-10-23.md) are done, because Bulgaria is not confirmed in any public source. Which instrument is traded, and therefore which series the research uses, follows from those checks ([ADR 0003](decisions/0003-instrument-and-data-source.md)).
+Phase **P1 – Research** is in progress; the foundation (P0) is done. The data foundation is complete: `01_data` ran on 2026-10-27 and the Deribit series of `BTC_USDC-PERPETUAL` is clean and matches the contract served by the Coinbase gateway ([R-001](RESEARCH_LOG.md)). The technical path to trade through the Coinbase gateway is verified (authentication, order placement, query and cancellation, E37–E39). What is **not** settled is the legal basis: [ADR 0002](decisions/0002-execution-venue.md) stays `proposed` because Coinbase gave no written confirmation for a Bulgarian resident and the EU-licensed product has no documented API. No experiment on a model has been run yet, so **no performance claim is made anywhere in this repository**.
 
 ## Next steps
 
@@ -22,11 +22,9 @@ Each step states **why** it is needed and its **exit criterion**, so progress is
 
 | # | Step | Why it is needed | Done when |
 |---|---|---|---|
-| 1 | Run checks V1–V3 with Coinbase retail support at help.coinbase.com (not the Derivatives Exchange desk, E28): derivatives available for the account, serving entity and product, API access | Coinbase is chosen, but eligibility for a Bulgarian resident and API access are unverified; trading where it is not allowed is not an option | V1–V3 results recorded in the evidence file; ADR 0002 `accepted`; if the checks fail, V4 (Kraken, then OKX) is run before any research is finalised |
-| 1a | Run the API smoke test, stage 2 (stages 0–1 done on 2026-10-26/27, E37–E38; [runbook](RUNBOOK_API_SMOKE_TEST.md)) | Shows whether the key can run an order lifecycle on the gateway (authentication already works); it does not settle legality (V1–V2) | V3 row in the evidence file updated with the outcome; no open order left |
-| 2 | Choose the traded instrument and research data source ([ADR 0003](decisions/0003-instrument-and-data-source.md)) | Research must use the instrument that will be traded; funding, settlement and leverage differ between the candidate products | ADR 0003 `accepted` with the measured proxy difference, if a proxy is used |
-| 3 | Run `01_data` (Deribit provider, cache and funding are implemented and unit-tested; the owner runs the notebook with network access) | Every later result depends on clean, reproducible data | Notebook 01 `done`; cache reproducible; schema tests green |
-| 4 | Baselines in `02_baselines` (buy-and-hold, flat, linear model) with costs | These are the bars any candidate must beat (gate G1) | Notebook 02 `done`; numbers in the research log (R-001) |
+| 1 | Run checks V1–V3 with Coinbase retail support at help.coinbase.com (not the Derivatives Exchange desk, E28): derivatives available for the account, serving entity and product, API access | Coinbase is chosen, but eligibility for a Bulgarian resident and API access are unverified; trading where it is not allowed is not an option | V1–V3 results recorded in the evidence file (V2 cannot be had in writing through chat support: use a written legal opinion); ADR 0002 `accepted`; if the checks fail, V4 (Kraken, then OKX) is run before any research is finalised |
+| 2 | Accept [ADR 0003](decisions/0003-instrument-and-data-source.md) for the chosen route (owner decision) | Research must use the instrument that will be traded; the 01_data result supports the Deribit series for Global Derivatives | ADR 0003 `accepted` with its evidence linked; reopened if the route changes |
+| 3 | Baselines in `02_baselines` (buy-and-hold, flat, linear model) with costs; decide how the 13 zero-volume candles and the 36 candles without funding are handled | These are the bars any candidate must beat (gate G1); data decisions must be explicit | Notebook 02 `done`; numbers in the research log (R-002); data handling recorded |
 
 ## Open questions and risks
 
@@ -39,6 +37,7 @@ Each step states **why** it is needed and its **exit criterion**, so progress is
 | The EU-licensed Coinbase contract (index-based, daily settlement, price limits) may have a short price history and different mechanics from the Deribit-based perpetual | Research on the wrong or too short a series would not transfer to the traded product | Compare in `01_data`; if only a proxy is usable, measure its difference first (ADR 0003) |
 | The contract terms for the owner's current account are one-sided: liability capped at 12 months of fees (E33), Bermuda arbitration, a pledge over the assets in the derivatives account, liquidation and auto-deleveraging at the exchange's discretion (E29, E30) | Real losses beyond the owner's control; recourse is limited | Owner decides with these terms in view; independent legal advice recommended before real money |
 | Market data obtained through Coinbase Bermuda may not be stored in a standalone database (E32) | A research cache built from it could breach the terms | Deribit's Terms of Service allow personal use only (E34, 2021 version): keep the cache private and unshared, and re-read the current terms before step 3 |
+| Which Coinbase route is used for paper and live trading: Global Derivatives (technically verified, not under an EU licence, E15) or the EU-licensed product (API access undocumented) | Decides the broker adapter, the traded series and the legal basis | Owner decides after the written answer from Coinbase (V2) and, preferably, independent legal advice; Kraken/OKX remain fallbacks (V4) |
 | Binance status rests on secondary sources only | Low; Binance is excluded either way | Optionally confirm against Binance's own notice |
 | Coinbase API for derivatives changed on 2026-10-01 (JSON-RPC 2.0 gateway, no parallel run) | Any code written against the old INTX REST endpoints must be rewritten | Execution adapter is built only after ADR 0002 is accepted |
 | Model family is open (linear, NN, boosting, sequence) | Avoid anchoring on the predecessor's setup | Compared fairly in `03_features_model`; tracked in [ADR 0001](decisions/0001-model-stack.md) |
@@ -65,7 +64,7 @@ Each step states **why** it is needed and its **exit criterion**, so progress is
 | Notebook | Purpose | Status |
 |---|---|---|
 | [00_colab_bootstrap.ipynb](../notebooks/00_colab_bootstrap.ipynb) | 00 – Colab bootstrap: Run this first in Google Colab (needed only for experiments that require PyTorch/GPU). | not started |
-| [01_data.ipynb](../notebooks/01_data.ipynb) | 01 – Data: Goal: load the perpetual we will actually trade, validate it, cache it. Checks: gaps, duplicates, closed candles only, UTC. Add funding rates. | in progress |
+| [01_data.ipynb](../notebooks/01_data.ipynb) | 01 – Data: Goal: load the perpetual we will actually trade, validate it, cache it. Checks: gaps, duplicates, closed candles only, UTC. Add funding rates. | done |
 | [02_baselines.ipynb](../notebooks/02_baselines.ipynb) | 02 – Baselines: Buy-and-hold, flat, and the previous linear model on the NEW data, with costs. | not started |
 | [03_features_model.ipynb](../notebooks/03_features_model.ipynb) | 03 – Features and models: Only features that exist live. Compare model families fairly (same data, costs, splits). | not started |
 | [04_validation.ipynb](../notebooks/04_validation.ipynb) | 04 – Validation: Tune on an early window; test ONCE on a held-out later window. Costs and funding included. | not started |

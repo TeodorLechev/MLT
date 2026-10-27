@@ -15,7 +15,7 @@ Which instrument is traded on Coinbase, and which series is used for research? R
 After V1–V3: load the candles and funding of the chosen product in `01_data`; if a proxy (option 3) is used, measure its difference to the traded series (price, funding, volume) and the effect on net returns of a fixed baseline strategy.
 
 ## Result
-Not yet measured.
+Measured in `01_data` (2026-10-27, [R-001](../RESEARCH_LOG.md), E40): the Deribit public specification equals the specification served by the Coinbase gateway on every field compared, and the series is clean (26,280 hourly candles, 0 gaps, 0 duplicates, 13 zero-volume candles) with 26,244 funding observations. Not yet compared: the app's product page and the candle series themselves between Deribit and the gateway. The result holds for the Global Derivatives route; the EU-licensed product would be a different instrument.
 
 ## Decision and consequences
 Pending. Depends on ADR 0002 (V1–V3). Until accepted, notebooks 02–04 must not be treated as final.
