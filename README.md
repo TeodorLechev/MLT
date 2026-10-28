@@ -9,8 +9,8 @@
 |---|---|
 | **Current phase** | P1 – Research (in progress) |
 | **Last synced** | 2026-10-28 |
-| **Tests** | 49 passed, 0 failed |
-| **Modules done** | 3 / 9 |
+| **Tests** | 62 passed, 0 failed |
+| **Modules done** | 4 / 10 |
 | **Decisions** | 0 accepted · 3 proposed · 0 rejected |
 <!-- END:auto:status -->
 
@@ -63,9 +63,10 @@
 | Module | What it does | Status | Tests |
 |---|---|---|---|
 | `config` | Typed settings from environment; dry-run is the default, live needs an explicit confirmation phrase. | done | 4 |
-| `data` | Candle providers (Deribit, Coinbase), one canonical OHLCV schema, validation, parquet cache. | done | 31 |
+| `data` | Candle providers (Deribit, Coinbase), one canonical OHLCV schema, validation, parquet cache. | done | 32 |
 | `features` | Pure feature functions, identical in research, backtest and live (no look-ahead). | stub | 0 |
-| `models` | Model-agnostic Forecaster contract plus the models that won experiments. | done | 2 |
+| `models` | Model-agnostic Forecaster contract plus the models that won experiments. | done | 7 |
+| `evaluation` | Research helpers: causal position-to-PnL accounting with costs and funding, performance metrics. The backtest module must reproduce its conventions. | done | 7 |
 | `strategy` | Turns predictions into target positions (thresholds, cost filter). | stub | 0 |
 | `risk` | Position limits, daily loss halt, liquidation distance. | stub | 0 |
 | `backtest` | Walk-forward simulation with fees, slippage and funding; must reproduce notebook results. | stub | 0 |
@@ -82,7 +83,7 @@ Module contracts and data flow: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 |---|---|---|
 | [00_colab_bootstrap.ipynb](notebooks/00_colab_bootstrap.ipynb) | 00 – Colab bootstrap: Run this first in Google Colab (needed only for experiments that require PyTorch/GPU). | not started |
 | [01_data.ipynb](notebooks/01_data.ipynb) | 01 – Data: Goal: load the perpetual we will actually trade, validate it, cache it. Checks: gaps, duplicates, closed candles only, UTC. Add funding rates. | done |
-| [02_baselines.ipynb](notebooks/02_baselines.ipynb) | 02 – Baselines: Buy-and-hold, flat, and the previous linear model on the NEW data, with costs. | not started |
+| [02_baselines.ipynb](notebooks/02_baselines.ipynb) | 02 – Baselines: Buy-and-hold, flat, and the previous linear model on the NEW data, with costs. | in progress |
 | [03_features_model.ipynb](notebooks/03_features_model.ipynb) | 03 – Features and models: Only features that exist live. Compare model families fairly (same data, costs, splits). | not started |
 | [04_validation.ipynb](notebooks/04_validation.ipynb) | 04 – Validation: Tune on an early window; test ONCE on a held-out later window. Costs and funding included. | not started |
 | [05_decision.ipynb](notebooks/05_decision.ipynb) | 05 – Decision: Does the candidate pass the research gate? Summarise evidence and update docs/decisions. | not started |
@@ -105,6 +106,10 @@ Experiment results with numbers, data period and costs: [docs/RESEARCH_LOG.md](d
 <!-- BEGIN:auto:changes -->
 **2026-10-28**
 - **Added:** evidence E41 (Coinbase support e-mail is disabled; requests go through the web form); V2 updated
+- **Added:** mlt.evaluation (simulate, metrics: causal position-to-PnL accounting with costs and funding), mlt.models.linear (OnlineLinear, the predecessor's SGD model as a baseline), mlt.models.online (run_online: causal walk-forward training), FrameCache.read (cache without network)
+- **Added:** notebook 02_baselines (flat, buy-and-hold, previous linear model, cost and funding sensitivity, calendar years, shifted-timing test); status in progress, to be run by the owner
+- **Added:** 13 unit tests for the accounting, the online model and the causal protocol
+- **Docs:** ARCHITECTURE contracts and principle for helpers built during research; STATUS step 3
 
 **2026-10-27**
 - **Added:** evidence E38 (smoke test stage 1: authentication with the uri-claim JWT and read-only private calls succeed for the owner's key)

@@ -8,7 +8,12 @@ Dated history of what changed and why. Groups: Added, Changed, Fixed, Removed, D
 
 ### Added
 - evidence E41 (Coinbase support e-mail is disabled; requests go through the web form); V2 updated
+- mlt.evaluation (simulate, metrics: causal position-to-PnL accounting with costs and funding), mlt.models.linear (OnlineLinear, the predecessor's SGD model as a baseline), mlt.models.online (run_online: causal walk-forward training), FrameCache.read (cache without network)
+- notebook 02_baselines (flat, buy-and-hold, previous linear model, cost and funding sensitivity, calendar years, shifted-timing test); status in progress, to be run by the owner
+- 13 unit tests for the accounting, the online model and the causal protocol
 
+### Docs
+- ARCHITECTURE contracts and principle for helpers built during research; STATUS step 3
 
 ## 2026-10-27
 

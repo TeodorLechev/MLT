@@ -6,7 +6,7 @@ name = "mlt"
 tagline = "research-first ML trading framework for crypto perpetuals"
 
 # Dependency order of the modules (also the build order of Stage 2).
-order = ["config", "data", "features", "models", "strategy", "risk", "backtest", "execution", "engine"]
+order = ["config", "data", "features", "models", "evaluation", "strategy", "risk", "backtest", "execution", "engine"]
 
 [modules.config]
 description = "Typed settings from environment; dry-run is the default, live needs an explicit confirmation phrase."
@@ -16,6 +16,8 @@ description = "Candle providers (Deribit, Coinbase), one canonical OHLCV schema,
 description = "Pure feature functions, identical in research, backtest and live (no look-ahead)."
 [modules.models]
 description = "Model-agnostic Forecaster contract plus the models that won experiments."
+[modules.evaluation]
+description = "Research helpers: causal position-to-PnL accounting with costs and funding, performance metrics. The backtest module must reproduce its conventions."
 [modules.strategy]
 description = "Turns predictions into target positions (thresholds, cost filter)."
 [modules.risk]

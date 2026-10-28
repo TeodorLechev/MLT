@@ -39,6 +39,14 @@ class FrameCache:
         df.to_parquet(tmp)
         tmp.replace(path)
 
+    def read(self, venue: str, instrument: str, kind: str, interval: str | None = None) -> pd.DataFrame:
+        """Return a cached frame as it is, without any network access (for reproducible research)."""
+        path = self.path(venue, instrument, kind, interval)
+        df = self.load(path)
+        if df is None:
+            raise FileNotFoundError(f"nothing cached at {path}; run the data notebook first")
+        return df
+
     # ------------------------------------------------------------------ candles
     def get_candles(
         self,

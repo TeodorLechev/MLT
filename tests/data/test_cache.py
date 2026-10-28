@@ -85,3 +85,14 @@ def test_funding_cache_roundtrip_and_extension(tmp_path):
     assert len(prov.calls) == 1
     assert len(b) > len(a)
     assert b.index.is_unique
+
+
+def test_read_returns_cached_frame_without_provider(tmp_path):
+    import pytest
+
+    cache, prov = FrameCache(tmp_path), FakeProvider()
+    cache.get_candles(prov, "X", "1h", T0, T0 + 5 * H)
+    df = cache.read("fake", "X", "candles", "1h")
+    assert len(df) == 5
+    with pytest.raises(FileNotFoundError):
+        cache.read("fake", "Y", "candles", "1h")
