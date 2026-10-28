@@ -6,7 +6,7 @@ Single place that answers "where are we, what is next and why". Tables are gener
 | | |
 |---|---|
 | **Current phase** | P1 – Research (in progress) |
-| **Last synced** | 2026-10-27 |
+| **Last synced** | 2026-10-28 |
 | **Tests** | 49 passed, 0 failed |
 | **Modules done** | 3 / 9 |
 | **Decisions** | 0 accepted · 3 proposed · 0 rejected |

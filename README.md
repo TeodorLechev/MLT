@@ -8,7 +8,7 @@
 | | |
 |---|---|
 | **Current phase** | P1 – Research (in progress) |
-| **Last synced** | 2026-10-27 |
+| **Last synced** | 2026-10-28 |
 | **Tests** | 49 passed, 0 failed |
 | **Modules done** | 3 / 9 |
 | **Decisions** | 0 accepted · 3 proposed · 0 rejected |
@@ -103,6 +103,9 @@ Experiment results with numbers, data period and costs: [docs/RESEARCH_LOG.md](d
 ## 7. Recent changes
 
 <!-- BEGIN:auto:changes -->
+**2026-10-28**
+- **Added:** evidence E41 (Coinbase support e-mail is disabled; requests go through the web form); V2 updated
+
 **2026-10-27**
 - **Added:** evidence E38 (smoke test stage 1: authentication with the uri-claim JWT and read-only private calls succeed for the owner's key)
 - **Added:** evidence E39 (smoke test stage 2: a minimum-size post-only order was accepted, queried and cancelled on the Global Derivatives gateway)
@@ -116,12 +119,6 @@ Experiment results with numbers, data period and costs: [docs/RESEARCH_LOG.md](d
 - **Changed:** ADR 0003 records the gateway's contract specification; STATUS step 1a narrowed to stages 1-2
 - **Changed:** smoke test validates the key file (clear errors for a wrong format or an Ed25519 key, never echoing secrets); runbook gets a Windows example
 - **Fixed:** removed the shebang from tools/coinbase_smoke_test.py (ruff EXE001 failed CI because git stores the file as non-executable); the script is run with python tools/coinbase_smoke_test.py
-
-**2026-10-25**
-- **Added:** tools/coinbase_smoke_test.py (read-only stages plus one post-only order that is cancelled; refuses to place orders without a confirmation phrase) with 10 unit tests against a fake gateway, and docs/RUNBOOK_API_SMOKE_TEST.md
-- **Added:** evidence E35 (help-center chat) and E36 (gateway technical guide); V2 and V3 results updated
-- **Changed:** lint and CI now cover tools/; live/dev extras include PyJWT and cryptography
-- **Docs:** STATUS next step 1a (smoke test) and README documentation map
 
 Full history: [docs/CHANGELOG.md](docs/CHANGELOG.md).
 <!-- END:auto:changes -->

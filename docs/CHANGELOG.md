@@ -4,6 +4,12 @@ Dated history of what changed and why. Groups: Added, Changed, Fixed, Removed, D
 
 <!-- changelog:start -->
 
+## 2026-10-28
+
+### Added
+- evidence E41 (Coinbase support e-mail is disabled; requests go through the web form); V2 updated
+
+
 ## 2026-10-27
 
 ### Added
