@@ -9,9 +9,9 @@
 |---|---|
 | **Current phase** | P1 – Research (in progress) |
 | **Last synced** | 2026-10-29 |
-| **Tests** | 62 passed, 0 failed |
-| **Modules done** | 4 / 10 |
-| **Decisions** | 0 accepted · 4 proposed · 0 rejected |
+| **Tests** | 68 passed, 0 failed |
+| **Modules done** | 5 / 11 |
+| **Decisions** | 1 accepted · 3 proposed · 0 rejected |
 <!-- END:auto:status -->
 
 **Focus now / next step:** see [docs/STATUS.md](docs/STATUS.md#current-focus) (kept in sync with every change).
@@ -67,6 +67,7 @@
 | `features` | Pure feature functions, identical in research, backtest and live (no look-ahead). | stub | 0 |
 | `models` | Model-agnostic Forecaster contract plus the models that won experiments. | done | 7 |
 | `evaluation` | Research helpers: causal position-to-PnL accounting with costs and funding, performance metrics. The backtest module must reproduce its conventions. | done | 7 |
+| `protocol` | Evaluation protocol (ADR 0004): frozen data window, development / validation / test blocks, a guard on the test block. | done | 6 |
 | `strategy` | Turns predictions into target positions (thresholds, cost filter). | stub | 0 |
 | `risk` | Position limits, daily loss halt, liquidation distance. | stub | 0 |
 | `backtest` | Walk-forward simulation with fees, slippage and funding; must reproduce notebook results. | stub | 0 |
@@ -83,7 +84,7 @@ Module contracts and data flow: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 |---|---|---|
 | [00_colab_bootstrap.ipynb](notebooks/00_colab_bootstrap.ipynb) | 00 – Colab bootstrap: Run this first in Google Colab (needed only for experiments that require PyTorch/GPU). | not started |
 | [01_data.ipynb](notebooks/01_data.ipynb) | 01 – Data: Goal: load the perpetual we will actually trade, validate it, cache it. Checks: gaps, duplicates, closed candles only, UTC. Add funding rates. | done |
-| [02_baselines.ipynb](notebooks/02_baselines.ipynb) | 02 – Baselines: Buy-and-hold, flat, and the previous linear model on the NEW data, with costs. | done |
+| [02_baselines.ipynb](notebooks/02_baselines.ipynb) | 02 – Baselines: Buy-and-hold, flat, and the previous linear model on the NEW data, with costs. | in progress |
 | [03_features_model.ipynb](notebooks/03_features_model.ipynb) | 03 – Features and models: Only features that exist live. Compare model families fairly (same data, costs, splits). | not started |
 | [04_validation.ipynb](notebooks/04_validation.ipynb) | 04 – Validation: Tune on an early window; test ONCE on a held-out later window. Costs and funding included. | not started |
 | [05_decision.ipynb](notebooks/05_decision.ipynb) | 05 – Decision: Does the candidate pass the research gate? Summarise evidence and update docs/decisions. | not started |
@@ -99,7 +100,7 @@ Experiment results with numbers, data period and costs: [docs/RESEARCH_LOG.md](d
 | [0001](docs/decisions/0001-model-stack.md) | Model stack (NumPy core vs PyTorch) | proposed | – |
 | [0002](docs/decisions/0002-execution-venue.md) | Execution venue | proposed | [docs/evidence/venue-availability-2026-10-23.md](docs/evidence/venue-availability-2026-10-23.md) |
 | [0003](docs/decisions/0003-instrument-and-data-source.md) | Traded instrument and research data source | proposed | [docs/evidence/venue-availability-2026-10-23.md](docs/evidence/venue-availability-2026-10-23.md) |
-| [0004](docs/decisions/0004-evaluation-protocol.md) | Evaluation protocol: fixed data window and time split | proposed | – |
+| [0004](docs/decisions/0004-evaluation-protocol.md) | Evaluation protocol: fixed data window and time split | accepted | [tests/test_protocol.py](tests/test_protocol.py) |
 <!-- END:auto:decisions -->
 
 ## 7. Recent changes
@@ -108,7 +109,10 @@ Experiment results with numbers, data period and costs: [docs/RESEARCH_LOG.md](d
 **2026-10-29**
 - **Added:** R-002 in the research log (baselines on the owner's run: flat, buy-and-hold and the previous linear model with costs and funding; cost, funding and calendar-year sensitivity; shifted-timing test)
 - **Added:** ADR 0004 (evaluation protocol: fixed data window and time blocks), proposed
+- **Added:** mlt.protocol (frozen data window, development / validation / test blocks, a guard on the test block, purge for batch training) with 6 unit tests; ADR 0004 accepted with that evidence
 - **Changed:** notebook 02_baselines is done with its findings filled from the printed numbers; STATUS next steps now start with the protocol decision and the data-handling decisions
+- **Changed:** notebook 02_baselines reads only the frozen window and adds the development / validation baseline table (status in progress until re-run); ADR 0004 clarified so that test-block baselines are produced in notebook 04
+- **Docs:** ARCHITECTURE contract for the protocol; STATUS next steps
 
 **2026-10-28**
 - **Added:** evidence E41 (Coinbase support e-mail is disabled; requests go through the web form); V2 updated
