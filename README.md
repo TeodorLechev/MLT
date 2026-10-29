@@ -8,10 +8,10 @@
 | | |
 |---|---|
 | **Current phase** | P1 – Research (in progress) |
-| **Last synced** | 2026-10-28 |
+| **Last synced** | 2026-10-29 |
 | **Tests** | 62 passed, 0 failed |
 | **Modules done** | 4 / 10 |
-| **Decisions** | 0 accepted · 3 proposed · 0 rejected |
+| **Decisions** | 0 accepted · 4 proposed · 0 rejected |
 <!-- END:auto:status -->
 
 **Focus now / next step:** see [docs/STATUS.md](docs/STATUS.md#current-focus) (kept in sync with every change).
@@ -83,7 +83,7 @@ Module contracts and data flow: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 |---|---|---|
 | [00_colab_bootstrap.ipynb](notebooks/00_colab_bootstrap.ipynb) | 00 – Colab bootstrap: Run this first in Google Colab (needed only for experiments that require PyTorch/GPU). | not started |
 | [01_data.ipynb](notebooks/01_data.ipynb) | 01 – Data: Goal: load the perpetual we will actually trade, validate it, cache it. Checks: gaps, duplicates, closed candles only, UTC. Add funding rates. | done |
-| [02_baselines.ipynb](notebooks/02_baselines.ipynb) | 02 – Baselines: Buy-and-hold, flat, and the previous linear model on the NEW data, with costs. | in progress |
+| [02_baselines.ipynb](notebooks/02_baselines.ipynb) | 02 – Baselines: Buy-and-hold, flat, and the previous linear model on the NEW data, with costs. | done |
 | [03_features_model.ipynb](notebooks/03_features_model.ipynb) | 03 – Features and models: Only features that exist live. Compare model families fairly (same data, costs, splits). | not started |
 | [04_validation.ipynb](notebooks/04_validation.ipynb) | 04 – Validation: Tune on an early window; test ONCE on a held-out later window. Costs and funding included. | not started |
 | [05_decision.ipynb](notebooks/05_decision.ipynb) | 05 – Decision: Does the candidate pass the research gate? Summarise evidence and update docs/decisions. | not started |
@@ -99,11 +99,17 @@ Experiment results with numbers, data period and costs: [docs/RESEARCH_LOG.md](d
 | [0001](docs/decisions/0001-model-stack.md) | Model stack (NumPy core vs PyTorch) | proposed | – |
 | [0002](docs/decisions/0002-execution-venue.md) | Execution venue | proposed | [docs/evidence/venue-availability-2026-10-23.md](docs/evidence/venue-availability-2026-10-23.md) |
 | [0003](docs/decisions/0003-instrument-and-data-source.md) | Traded instrument and research data source | proposed | [docs/evidence/venue-availability-2026-10-23.md](docs/evidence/venue-availability-2026-10-23.md) |
+| [0004](docs/decisions/0004-evaluation-protocol.md) | Evaluation protocol: fixed data window and time split | proposed | – |
 <!-- END:auto:decisions -->
 
 ## 7. Recent changes
 
 <!-- BEGIN:auto:changes -->
+**2026-10-29**
+- **Added:** R-002 in the research log (baselines on the owner's run: flat, buy-and-hold and the previous linear model with costs and funding; cost, funding and calendar-year sensitivity; shifted-timing test)
+- **Added:** ADR 0004 (evaluation protocol: fixed data window and time blocks), proposed
+- **Changed:** notebook 02_baselines is done with its findings filled from the printed numbers; STATUS next steps now start with the protocol decision and the data-handling decisions
+
 **2026-10-28**
 - **Added:** evidence E41 (Coinbase support e-mail is disabled; requests go through the web form); V2 updated
 - **Added:** mlt.evaluation (simulate, metrics: causal position-to-PnL accounting with costs and funding), mlt.models.linear (OnlineLinear, the predecessor's SGD model as a baseline), mlt.models.online (run_online: causal walk-forward training), FrameCache.read (cache without network)
@@ -118,12 +124,6 @@ Experiment results with numbers, data period and costs: [docs/RESEARCH_LOG.md](d
 - **Changed:** V3 now shows stages 0-1 done, stage 2 (order lifecycle) pending; STATUS step 1a narrowed to stage 2
 - **Changed:** V3 closed technically for Global Derivatives, still open for the EU-licensed product; ADR 0002 stays proposed; STATUS step 1a removed and the route decision added to open questions
 - **Changed:** notebook 01_data is done (comparison table and findings filled with the printed numbers); ADR 0003 result recorded; V2 recorded as not obtainable in writing through chat support; STATUS steps updated
-
-**2026-10-26**
-- **Added:** evidence E37 (smoke test stage 0: public gateway reachable from the owner's location; contract specification and fee fields read)
-- **Changed:** ADR 0003 records the gateway's contract specification; STATUS step 1a narrowed to stages 1-2
-- **Changed:** smoke test validates the key file (clear errors for a wrong format or an Ed25519 key, never echoing secrets); runbook gets a Windows example
-- **Fixed:** removed the shebang from tools/coinbase_smoke_test.py (ruff EXE001 failed CI because git stores the file as non-executable); the script is run with python tools/coinbase_smoke_test.py
 
 Full history: [docs/CHANGELOG.md](docs/CHANGELOG.md).
 <!-- END:auto:changes -->

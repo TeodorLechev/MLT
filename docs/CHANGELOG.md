@@ -4,6 +4,16 @@ Dated history of what changed and why. Groups: Added, Changed, Fixed, Removed, D
 
 <!-- changelog:start -->
 
+## 2026-10-29
+
+### Added
+- R-002 in the research log (baselines on the owner's run: flat, buy-and-hold and the previous linear model with costs and funding; cost, funding and calendar-year sensitivity; shifted-timing test)
+- ADR 0004 (evaluation protocol: fixed data window and time blocks), proposed
+
+### Changed
+- notebook 02_baselines is done with its findings filled from the printed numbers; STATUS next steps now start with the protocol decision and the data-handling decisions
+
+
 ## 2026-10-28
 
 ### Added

@@ -6,15 +6,15 @@ Single place that answers "where are we, what is next and why". Tables are gener
 | | |
 |---|---|
 | **Current phase** | P1 – Research (in progress) |
-| **Last synced** | 2026-10-28 |
+| **Last synced** | 2026-10-29 |
 | **Tests** | 62 passed, 0 failed |
 | **Modules done** | 4 / 10 |
-| **Decisions** | 0 accepted · 3 proposed · 0 rejected |
+| **Decisions** | 0 accepted · 4 proposed · 0 rejected |
 <!-- END:auto:status -->
 
 ## Current focus
 
-Phase **P1 – Research** is in progress; the foundation (P0) is done. The data foundation is complete: `01_data` ran on 2026-10-27 and the Deribit series of `BTC_USDC-PERPETUAL` is clean and matches the contract served by the Coinbase gateway ([R-001](RESEARCH_LOG.md)). The technical path to trade through the Coinbase gateway is verified (authentication, order placement, query and cancellation, E37–E39). What is **not** settled is the legal basis: [ADR 0002](decisions/0002-execution-venue.md) stays `proposed` because Coinbase gave no written confirmation for a Bulgarian resident and the EU-licensed product has no documented API. No experiment on a model has been run yet, so **no performance claim is made anywhere in this repository**.
+Phase **P1 – Research** is in progress. The data foundation ([R-001](RESEARCH_LOG.md)) and the baselines ([R-002](RESEARCH_LOG.md)) are done: at gateway costs with funding, buy-and-hold returned +57.9 % (Sharpe 0.59, drawdown −54.6 %) and the previous linear model +92.1 % (Sharpe 0.745, drawdown −35.3 %) on 2024-02 to 2026-10, but the model's parameters were tuned on this period, so that is a reference level, not an edge. The technical path to trade through the Coinbase gateway is verified (E37–E39); the legal basis is not ([ADR 0002](decisions/0002-execution-venue.md) stays `proposed`). The next decision is the evaluation protocol before any model comparison. No claim of performance on unseen data is made anywhere in this repository.
 
 ## Next steps
 
@@ -24,7 +24,8 @@ Each step states **why** it is needed and its **exit criterion**, so progress is
 |---|---|---|---|
 | 1 | Run checks V1–V3 with Coinbase retail support at help.coinbase.com (not the Derivatives Exchange desk, E28): derivatives available for the account, serving entity and product, API access | Coinbase is chosen, but eligibility for a Bulgarian resident and API access are unverified; trading where it is not allowed is not an option | V1–V3 results recorded in the evidence file (V2 cannot be had in writing through chat support: use a written legal opinion); ADR 0002 `accepted`; if the checks fail, V4 (Kraken, then OKX) is run before any research is finalised |
 | 2 | Accept [ADR 0003](decisions/0003-instrument-and-data-source.md) for the chosen route (owner decision) | Research must use the instrument that will be traded; the 01_data result supports the Deribit series for Global Derivatives | ADR 0003 `accepted` with its evidence linked; reopened if the route changes |
-| 3 | Run `02_baselines` (written and dry-run on synthetic data; the owner runs it on the cached data): buy-and-hold, flat and the previous linear model with costs and funding; decide how the 13 zero-volume candles and the 36 candles without funding are handled | These are the bars any candidate must beat (gate G1); data decisions must be explicit | Notebook 02 `done`; numbers in the research log (R-002); data handling recorded |
+| 3 | Decide the evaluation protocol ([ADR 0004](decisions/0004-evaluation-protocol.md)): frozen data end and the development / validation / final-test blocks; decide how the 13 zero-volume candles and the 36 candles without funding are handled | The baselines are in sample for the inherited model, and the cache grew between runs; any model comparison needs a fixed, untouched final block (gate G1, G4) | ADR 0004 `accepted` with the constants applied in a notebook; data handling recorded |
+| 4 | Features and models in `03_features_model`: compare families on the same data, costs and blocks | A model is chosen only by experiment (ADR 0001); the bar is in R-002 | Notebook 03 `done`; R-003 with numbers; ADR 0001 `accepted` or `rejected` with evidence |
 
 ## Open questions and risks
 
@@ -66,7 +67,7 @@ Each step states **why** it is needed and its **exit criterion**, so progress is
 |---|---|---|
 | [00_colab_bootstrap.ipynb](../notebooks/00_colab_bootstrap.ipynb) | 00 – Colab bootstrap: Run this first in Google Colab (needed only for experiments that require PyTorch/GPU). | not started |
 | [01_data.ipynb](../notebooks/01_data.ipynb) | 01 – Data: Goal: load the perpetual we will actually trade, validate it, cache it. Checks: gaps, duplicates, closed candles only, UTC. Add funding rates. | done |
-| [02_baselines.ipynb](../notebooks/02_baselines.ipynb) | 02 – Baselines: Buy-and-hold, flat, and the previous linear model on the NEW data, with costs. | in progress |
+| [02_baselines.ipynb](../notebooks/02_baselines.ipynb) | 02 – Baselines: Buy-and-hold, flat, and the previous linear model on the NEW data, with costs. | done |
 | [03_features_model.ipynb](../notebooks/03_features_model.ipynb) | 03 – Features and models: Only features that exist live. Compare model families fairly (same data, costs, splits). | not started |
 | [04_validation.ipynb](../notebooks/04_validation.ipynb) | 04 – Validation: Tune on an early window; test ONCE on a held-out later window. Costs and funding included. | not started |
 | [05_decision.ipynb](../notebooks/05_decision.ipynb) | 05 – Decision: Does the candidate pass the research gate? Summarise evidence and update docs/decisions. | not started |
@@ -80,4 +81,5 @@ Each step states **why** it is needed and its **exit criterion**, so progress is
 | [0001](decisions/0001-model-stack.md) | Model stack (NumPy core vs PyTorch) | proposed | – |
 | [0002](decisions/0002-execution-venue.md) | Execution venue | proposed | [docs/evidence/venue-availability-2026-10-23.md](../docs/evidence/venue-availability-2026-10-23.md) |
 | [0003](decisions/0003-instrument-and-data-source.md) | Traded instrument and research data source | proposed | [docs/evidence/venue-availability-2026-10-23.md](../docs/evidence/venue-availability-2026-10-23.md) |
+| [0004](decisions/0004-evaluation-protocol.md) | Evaluation protocol: fixed data window and time split | proposed | – |
 <!-- END:auto:decisions -->
