@@ -75,3 +75,10 @@ def test_find_gaps_reports_missing_stretches():
 
 def test_find_gaps_empty_when_regular():
     assert find_gaps(make(5), "1h").empty
+
+
+def test_zero_volume_candle_is_valid_and_kept():
+    df = make()
+    df.iloc[2, df.columns.get_loc("volume")] = 0.0
+    out = validate_candles(df, "1h")
+    assert len(out) == len(df) and out["volume"].iloc[2] == 0.0

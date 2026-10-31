@@ -9,9 +9,9 @@
 |---|---|
 | **Current phase** | P1 – Research (in progress) |
 | **Last synced** | 2026-10-29 |
-| **Tests** | 68 passed, 0 failed |
+| **Tests** | 70 passed, 0 failed |
 | **Modules done** | 5 / 11 |
-| **Decisions** | 1 accepted · 3 proposed · 0 rejected |
+| **Decisions** | 2 accepted · 3 proposed · 0 rejected |
 <!-- END:auto:status -->
 
 **Focus now / next step:** see [docs/STATUS.md](docs/STATUS.md#current-focus) (kept in sync with every change).
@@ -63,11 +63,11 @@
 | Module | What it does | Status | Tests |
 |---|---|---|---|
 | `config` | Typed settings from environment; dry-run is the default, live needs an explicit confirmation phrase. | done | 4 |
-| `data` | Candle providers (Deribit, Coinbase), one canonical OHLCV schema, validation, parquet cache. | done | 32 |
+| `data` | Candle providers (Deribit, Coinbase), one canonical OHLCV schema, validation, parquet cache. | done | 33 |
 | `features` | Pure feature functions, identical in research, backtest and live (no look-ahead). | stub | 0 |
 | `models` | Model-agnostic Forecaster contract plus the models that won experiments. | done | 7 |
 | `evaluation` | Research helpers: causal position-to-PnL accounting with costs and funding, performance metrics. The backtest module must reproduce its conventions. | done | 7 |
-| `protocol` | Evaluation protocol (ADR 0004): frozen data window, development / validation / test blocks, a guard on the test block. | done | 6 |
+| `protocol` | Evaluation protocol (ADR 0004): frozen data window, development / validation / test blocks, a guard on the test block. | done | 7 |
 | `strategy` | Turns predictions into target positions (thresholds, cost filter). | stub | 0 |
 | `risk` | Position limits, daily loss halt, liquidation distance. | stub | 0 |
 | `backtest` | Walk-forward simulation with fees, slippage and funding; must reproduce notebook results. | stub | 0 |
@@ -101,6 +101,7 @@ Experiment results with numbers, data period and costs: [docs/RESEARCH_LOG.md](d
 | [0002](docs/decisions/0002-execution-venue.md) | Execution venue | proposed | [docs/evidence/venue-availability-2026-10-23.md](docs/evidence/venue-availability-2026-10-23.md) |
 | [0003](docs/decisions/0003-instrument-and-data-source.md) | Traded instrument and research data source | proposed | [docs/evidence/venue-availability-2026-10-23.md](docs/evidence/venue-availability-2026-10-23.md) |
 | [0004](docs/decisions/0004-evaluation-protocol.md) | Evaluation protocol: fixed data window and time split | accepted | [tests/test_protocol.py](tests/test_protocol.py) |
+| [0005](docs/decisions/0005-data-handling.md) | Data handling: zero-volume candles and missing funding | accepted | [tests/data/test_schema.py](tests/data/test_schema.py) |
 <!-- END:auto:decisions -->
 
 ## 7. Recent changes
@@ -110,8 +111,11 @@ Experiment results with numbers, data period and costs: [docs/RESEARCH_LOG.md](d
 - **Added:** R-002 in the research log (baselines on the owner's run: flat, buy-and-hold and the previous linear model with costs and funding; cost, funding and calendar-year sensitivity; shifted-timing test)
 - **Added:** ADR 0004 (evaluation protocol: fixed data window and time blocks), proposed
 - **Added:** mlt.protocol (frozen data window, development / validation / test blocks, a guard on the test block, purge for batch training) with 6 unit tests; ADR 0004 accepted with that evidence
+- **Added:** R-003 in the research log (baselines per block under the protocol: development and validation; sensitivity to the 23-bar change of the window start; timing test)
+- **Added:** ADR 0005 (data handling: zero-volume candles kept and flagged, missing funding counted as zero), accepted with tests as evidence; protocol.require_window (fails if the cache does not cover the frozen window)
 - **Changed:** notebook 02_baselines is done with its findings filled from the printed numbers; STATUS next steps now start with the protocol decision and the data-handling decisions
 - **Changed:** notebook 02_baselines reads only the frozen window and adds the development / validation baseline table (status in progress until re-run); ADR 0004 clarified so that test-block baselines are produced in notebook 04
+- **Changed:** DATA_START set to the first candle of the owner's cache (2023-10-30 22:00); notebook 01 uses the frozen window constants, notebook 02 checks coverage and prints the dates of the data exceptions; STATUS step 3 is now the model comparison
 - **Docs:** ARCHITECTURE contract for the protocol; STATUS next steps
 
 **2026-10-28**

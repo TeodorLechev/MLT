@@ -47,3 +47,14 @@ def test_purge_drops_samples_whose_target_reaches_into_the_block():
 
 def test_window_is_consistent():
     assert p.DATA_START < p.VALIDATION_START < p.TEST_START < p.DATA_END
+
+
+def test_require_window_accepts_full_coverage_and_rejects_gaps_at_either_end():
+    full = pd.DataFrame({"x": 1.0}, index=IDX)
+    p.require_window(full)                                       # covers the window with margin
+    with pytest.raises(ValueError):
+        p.require_window(full.loc[full.index > p.DATA_START])    # head missing
+    with pytest.raises(ValueError):
+        p.require_window(full.loc[full.index < p.DATA_END])      # tail missing
+    with pytest.raises(ValueError):
+        p.require_window(full.iloc[:0])

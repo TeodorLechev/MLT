@@ -19,6 +19,25 @@ Every experiment that supports a decision is recorded here **with its numbers**,
 
 <!-- Newest first. -->
 
+### R-003 – Baselines under the evaluation protocol: development and validation blocks (2026-10-29)
+- **Question:** how do the baselines behave in the development and validation blocks, now that the data window is frozen (ADR 0004), and do the R-002 numbers survive a re-run?
+- **Notebook / commit:** notebooks/02_baselines.ipynb @ 2026-10-29 (second run by the owner; the numbers are those printed in that run)
+- **Data:** `BTC_USDC-PERPETUAL`, 1h, Deribit public API; the cache held 26,267 candles from 2023-10-30 22:00 to 2026-10-29 08:00 UTC (23 candles fewer at the start than in R-002, because the cache was re-fetched), funding 26,231 observations, 36 candles without funding. Evaluated bars: from 2024-02-03 05:00 UTC (derived from the cache index: warm-up 287 bars plus burn-in 2,000 updates), 23,980 bars in total, of which 14,539 in the development block and 5,088 in the validation block; the test block (the last 4,353 evaluated bars) was **not evaluated**.
+- **Setup:** as R-002 (1x leverage, taker 3.5 bp from the gateway, funding sign and timing assumed, predecessor's linear model with its own parameters, no tuning). The predecessor's tuning data (Binance, to 2026-08-01) overlaps both blocks, so neither block is clean for that model.
+- **Result** (gateway taker 3.5 bp, funding included):
+
+| Block | Strategy | Total return | Sharpe | Max drawdown | Trades |
+|---|---|---|---|---|---|
+| Development (14,539 bars) | Buy-and-hold | +133.6 % | 1.28 | -34.8 % | 1 |
+| Development | Linear model | +55.8 % | 0.79 | -35.3 % | 99 |
+| Validation (5,088 bars) | Buy-and-hold | -34.3 % | -1.28 | -50.9 % | 1 |
+| Validation | Linear model | +7.2 % | 0.49 | -31.1 % | 31 |
+
+Whole evaluated period, gateway taker 3.5 bp: buy-and-hold +57.6 % (Sharpe 0.59, drawdown -54.6 %), linear model +91.8 % (Sharpe 0.744, drawdown -35.3 %, 165 trades, 96 % in the market, turnover 60 per year). With +5 bp slippage the linear model gives +76.8 % (Sharpe 0.686); with the predecessor's costs +16.7 % (Sharpe 0.348).
+
+- **Sensitivity:** against R-002 (window starting 23 bars earlier) the main numbers move by 0.3 points or less (buy-and-hold +57.9 % -> +57.6 %, linear +92.1 % -> +91.8 %), but the linear model with +5 bp slippage moves from +78.9 % to +76.8 %: a different start changes the path of an online model by about two points. Funding off: buy-and-hold +84.7 %, linear +109.5 %; one-bar lag: no visible change. Calendar years (gateway taker, funding): 2024 +95.9 % vs +61.6 %; 2025 -9.8 % vs +3.0 %; 2026 to date -11.1 % vs +15.4 %; after 2026-08-01 +25.3 % vs +10.4 % (buy-and-hold vs linear model). Timing test: real Sharpe 0.744, shifted mean -0.083, 5th-95th percentile [-1.065, 0.695], 4.0 % of shifted runs at least as good.
+- **Conclusion:** the linear model behaves as a defensive trend follower: it loses to buy-and-hold in the strongly rising development block and in the last three months, and it clearly wins in the falling validation block (+7.2 % against -34.3 %), keeping a positive Sharpe in both blocks (0.79 and 0.49). That is a reference level, not an edge: its parameters were tuned on this data, and a Sharpe of 0.5 over 5,088 bars has a wide error. The bars for a candidate on the validation block are Sharpe 0.49 / drawdown -31.1 % (linear model) and buy-and-hold -1.28 / -50.9 %; how a candidate must beat them is to be defined in notebook 04 before it is looked at. Not recorded: the dates of the 13 zero-volume candles and the 36 candles without funding (the notebook now prints them; ADR 0005); the fee schedule of the account; the verified funding convention.
+
 ### R-002 – Baselines: flat, buy-and-hold and the previous linear model, with costs and funding (2026-10-29)
 - **Question:** which bar must a candidate model beat on this instrument after costs and funding, and does the previous linear model clear it?
 - **Notebook / commit:** notebooks/02_baselines.ipynb @ 2026-10-29 (run by the owner; the numbers are those printed in that run)

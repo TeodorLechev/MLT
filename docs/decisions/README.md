@@ -13,4 +13,5 @@ Nothing is `accepted` without a notebook/test link.
 | [0002](0002-execution-venue.md) | Execution venue | proposed | [docs/evidence/venue-availability-2026-10-23.md](../../docs/evidence/venue-availability-2026-10-23.md) |
 | [0003](0003-instrument-and-data-source.md) | Traded instrument and research data source | proposed | [docs/evidence/venue-availability-2026-10-23.md](../../docs/evidence/venue-availability-2026-10-23.md) |
 | [0004](0004-evaluation-protocol.md) | Evaluation protocol: fixed data window and time split | accepted | [tests/test_protocol.py](../../tests/test_protocol.py) |
+| [0005](0005-data-handling.md) | Data handling: zero-volume candles and missing funding | accepted | [tests/data/test_schema.py](../../tests/data/test_schema.py) |
 <!-- END:auto:index -->

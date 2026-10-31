@@ -10,10 +10,13 @@ Dated history of what changed and why. Groups: Added, Changed, Fixed, Removed, D
 - R-002 in the research log (baselines on the owner's run: flat, buy-and-hold and the previous linear model with costs and funding; cost, funding and calendar-year sensitivity; shifted-timing test)
 - ADR 0004 (evaluation protocol: fixed data window and time blocks), proposed
 - mlt.protocol (frozen data window, development / validation / test blocks, a guard on the test block, purge for batch training) with 6 unit tests; ADR 0004 accepted with that evidence
+- R-003 in the research log (baselines per block under the protocol: development and validation; sensitivity to the 23-bar change of the window start; timing test)
+- ADR 0005 (data handling: zero-volume candles kept and flagged, missing funding counted as zero), accepted with tests as evidence; protocol.require_window (fails if the cache does not cover the frozen window)
 
 ### Changed
 - notebook 02_baselines is done with its findings filled from the printed numbers; STATUS next steps now start with the protocol decision and the data-handling decisions
 - notebook 02_baselines reads only the frozen window and adds the development / validation baseline table (status in progress until re-run); ADR 0004 clarified so that test-block baselines are produced in notebook 04
+- DATA_START set to the first candle of the owner's cache (2023-10-30 22:00); notebook 01 uses the frozen window constants, notebook 02 checks coverage and prints the dates of the data exceptions; STATUS step 3 is now the model comparison
 
 ### Docs
 - ARCHITECTURE contract for the protocol; STATUS next steps
